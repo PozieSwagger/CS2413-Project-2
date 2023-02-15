@@ -36,10 +36,37 @@ public:
 	string* operator[](int i); 
 
 	//File reading Method
-	void readCSV(string filename);
+	void readCSV(string filename){
+
+		ifstream file;
+		file.open(filename, ifstream::in);
+
+		string data;
+		int x = 0, y = 0;
+		while(getline(file, data)){
+			int end = data.find(',');
+			while(end != -1){
+				myTable[x][y] = data.substr(0, end);
+				data.erase(data.begin(), data.begin() + end + 1);
+				end = data.find(',');
+				y++;
+			}
+			x++;
+			y = 0;
+		}
+
+		file.close();
+	};
 
 	//Output Method
-	void display();
+	void display(){
+		for(int x = 0; x < noRows; x++){
+			for(int y = 0; y < noCols; y++){
+				cout << myTable[x][y] << " ";
+			}
+			cout << endl;
+		}
+	};
 
 	//Sort the table
 	void sortTable();
@@ -87,18 +114,13 @@ int main()
 
     // TODO: read the file input name and call readCSV()
 
-	d.readCSV(fileName);
+	d->readCSV(fileName);
+	d->display();
+	
     
     // TODO: read the data types and store in DTarray of d
 
     // TODO: start reading the options till the end of the file
 
 	return 0;
-}
-
-void tableClass::readCSV(string filename){
-
-	fstream file;
-	file.open(filename, ios::in);
-
 }
