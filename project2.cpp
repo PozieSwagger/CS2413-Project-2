@@ -41,6 +41,8 @@ public:
 		ifstream file;
 		file.open(filename, ifstream::in);
 
+
+		//Reference https://favtutor.com/blogs/split-string-cpp
 		string data;
 		int x = 0, y = 0;
 		while(getline(file, data)){
@@ -69,7 +71,27 @@ public:
 	};
 
 	//Sort the table
-	void sortTable();
+	void sortTable(){
+		int i, x, y;
+		string key;
+		for(i = 0; i < noRows; i++){
+			key = myTable[i][0];
+			x = i + 1;
+			while(x >= 0 && myTable[x][0] > key){
+				y = 0;
+				myTable[x + 1][y] = myTable[x][y];
+				
+				//Error here with moving the other columns
+				while(y < noCols){
+					myTable[x][y + 1] = myTable[x][y];
+					y++;
+				}
+
+				x++;
+			}
+			myTable[x + 1][0] = key;
+		}
+	};
 
 	//Search record
 	string* searchRecord(string str); // str will be from the first column
@@ -115,6 +137,9 @@ int main()
     // TODO: read the file input name and call readCSV()
 
 	d->readCSV(fileName);
+	d->display();
+
+	d->sortTable();
 	d->display();
 	
     
