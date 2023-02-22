@@ -42,17 +42,19 @@ public:
 		file.open(filename, ifstream::in);
 
 
-		//Reference https://favtutor.com/blogs/split-string-cpp
+		//Reference https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
 		string data;
 		int x = 0, y = 0;
 		while(getline(file, data)){
-			int end = data.find(',');
-			while(end != -1){
-				myTable[x][y] = data.substr(0, end);
-				data.erase(data.begin(), data.begin() + end + 1);
+			size_t end = 0;
+
+			for(int i = 0; i < 6; i++){
 				end = data.find(',');
+				myTable[x][y] = data.substr(0, end);
+				data.erase(0, end + 1);
 				y++;
 			}
+
 			x++;
 			y = 0;
 		}
@@ -71,26 +73,37 @@ public:
 	};
 
 	//Sort the table
+	//Refernece https://stackoverflow.com/questions/44526234/sorting-2d-array-using-selection-sort
 	void sortTable(){
-		int i, x, y;
-		string key;
-		for(i = 0; i < noRows; i++){
-			key = myTable[i][0];
-			x = i + 1;
-			while(x >= 0 && myTable[x][0] > key){
-				y = 0;
-				myTable[x + 1][y] = myTable[x][y];
-				
-				//Error here with moving the other columns
-				while(y < noCols){
-					myTable[x][y + 1] = myTable[x][y];
-					y++;
+		int maxR, maxC;
+		string maxV;
+
+		for(int rOuter = 0; rOuter < noRows; rOuter++){
+			for(int cOuter = 0; cOuter < noCols; cOuter++){
+				maxR = rOuter;
+				maxC = cOuter;
+				maxV = myTable[rOuter][cOuter];
+
+				for(int cInner = cOuter + 1; cInner < noCols; cInner++){
+					if(myTable[rOuter][cInner] < maxV){
+						maxR = rOuter;
+						maxC = cInner;
+						maxV = myTable[rOuter][cInner];
+					}
 				}
 
-				x++;
+				for(int rInner = rOuter + 1; rInner < noRows; rInner++){
+					for (int cInner = 0; cInner < noCols; cInner++) {
+                		if (myTable[rInner][cInner] > maxV) {
+                   			maxR = rInner; 
+                  			maxC = cInner; 
+                   			maxV = myTable[rInner][cInner];
+                		}
+            		}
+				}
 			}
-			myTable[x + 1][0] = key;
 		}
+		
 	};
 
 	//Search record
@@ -139,8 +152,10 @@ int main()
 	d->readCSV(fileName);
 	d->display();
 
-	d->sortTable();
-	d->display();
+
+	// cout << endl << "The Sorted Table" << endl;
+	// d->sortTable();
+	// d->display();
 	
     
     // TODO: read the data types and store in DTarray of d
