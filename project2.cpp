@@ -75,31 +75,18 @@ public:
 	//Sort the table
 	//Refernece https://stackoverflow.com/questions/44526234/sorting-2d-array-using-selection-sort
 	void sortTable(){
-		int maxR, maxC;
+		
 		string maxV;
 
-		for(int rOuter = 0; rOuter < noRows; rOuter++){
-			for(int cOuter = 0; cOuter < noCols; cOuter++){
-				maxR = rOuter;
-				maxC = cOuter;
-				maxV = myTable[rOuter][cOuter];
+		for(int i = 0; i < noRows; i++){
+			for(int j = 0; j < noCols; j++){
 
-				for(int cInner = cOuter + 1; cInner < noCols; cInner++){
-					if(myTable[rOuter][cInner] < maxV){
-						maxR = rOuter;
-						maxC = cInner;
-						maxV = myTable[rOuter][cInner];
+				if(myTable[j][0] > myTable[j + 1][0]){
+					for(int y = 0; y < noCols; y++){
+						string temp = myTable[j][y];
+						myTable[j][y] = myTable[j+1][y];
+						myTable[j+1][y] = temp;
 					}
-				}
-
-				for(int rInner = rOuter + 1; rInner < noRows; rInner++){
-					for (int cInner = 0; cInner < noCols; cInner++) {
-                		if (myTable[rInner][cInner] > maxV) {
-                   			maxR = rInner; 
-                  			maxC = cInner; 
-                   			maxV = myTable[rInner][cInner];
-                		}
-            		}
 				}
 			}
 		}
@@ -107,7 +94,10 @@ public:
 	};
 
 	//Search record
-	string* searchRecord(string str); // str will be from the first column
+	// str will be from the first column
+	string* searchRecord(string str){
+		
+	};
 
 	//Search value from table
 	void searchValue(string str);
@@ -153,9 +143,9 @@ int main()
 	d->display();
 
 
-	// cout << endl << "The Sorted Table" << endl;
-	// d->sortTable();
-	// d->display();
+	cout << endl << "The Sorted Table" << endl;
+	d->sortTable();
+	d->display();
 	
     
     // TODO: read the data types and store in DTarray of d

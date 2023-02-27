@@ -19,3 +19,9 @@ I or locate min in the given column number.
 C or column look up. When given of a set of columns will return a tableClass of the data from the ask rows.
 R or row look up. when given a set of rows will return a tableClass of the data from the ask rows.
 S or select area is to look at a select area of data 
+
+## To Do 
+- Fix error with not showing the first letter or the double at the end 
+- Operation
+- search 
+- exceptions
