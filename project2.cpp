@@ -31,13 +31,37 @@ public:
 		}
 		
 	};
+
+	//input the datatype onto DTarray
+	void readDT(string datatypes){
+		size_t end = 0;
+
+		//construt the DTarray
+		DTarray = new string [noCols];
+
+		//split the sting and enter into the array
+		for(int i = 0; i < 6; i++){
+			end = datatypes.find(' ');
+			DTarray[i] = datatypes.substr(0, end);
+			datatypes.erase(0, end + 1); 
+		}
+
+	};
 	
 	// Overload the [] operator to access a row in myTable
-	string* operator[](int i); 
+	string* operator[](int i){
+		if(i < 0 || i >= noRows){
+			cout << "nothing here" << endl;
+		}
+
+		return myTable[i];
+
+	}; 
 
 	//File reading Method
 	void readCSV(string filename){
 
+		//open the csv file
 		ifstream file;
 		file.open(filename, ifstream::in);
 
@@ -47,8 +71,9 @@ public:
 		int x = 0, y = 0;
 		while(getline(file, data)){
 			size_t end = 0;
-
-			for(int i = 0; i < 6; i++){
+			
+			//loop through line and split at a comma
+			for(int i = 0; i < noCols; i++){
 				end = data.find(',');
 				myTable[x][y] = data.substr(0, end);
 				data.erase(0, end + 1);
@@ -59,11 +84,14 @@ public:
 			y = 0;
 		}
 
+		//close the file
 		file.close();
 	};
 
 	//Output Method
 	void display(){
+		
+		// loop and print put the line
 		for(int x = 0; x < noRows; x++){
 			for(int y = 0; y < noCols; y++){
 				cout << myTable[x][y] << " ";
@@ -78,10 +106,14 @@ public:
 		
 		string maxV;
 
+		//loop through the 2d array
 		for(int i = 0; i < noRows; i++){
 			for(int j = 0; j < noCols; j++){
-
+				
+				//compare the value to sort
 				if(myTable[j][0] > myTable[j + 1][0]){
+
+					//move through the row and swap the values
 					for(int y = 0; y < noCols; y++){
 						string temp = myTable[j][y];
 						myTable[j][y] = myTable[j+1][y];
@@ -96,11 +128,21 @@ public:
 	//Search record
 	// str will be from the first column
 	string* searchRecord(string str){
-		
+
+		//loop the first column and find the name
+		for(int i = 0; i < noRows; i++){
+			if(str == myTable[i][0])
+				return myTable[i];
+		}
+
+
+		return nullptr;
 	};
 
 	//Search value from table
-	void searchValue(string str);
+	void searchValue(string str){
+		
+	};
 	
 	//Getters
 	// returns the number of rows
@@ -116,10 +158,27 @@ public:
 	tableClass* getRowsCols(int colLeft, int colRight, int rowTop, int rowBottom); // returns a tableClass with the data between the cols and rows given
 
 	//Find info of a given column
-	double findMin(int colNumber); // returns the min of the given column
+	// returns the min of the given column
+	double findMin(int colNumber){
+
+		//set the starting value for low
+		double low = stod(myTable[0][colNumber]);
+
+		//lopp through the given column and return the lowest value
+		for(int i = 1; i < noRows; i++){
+			if(stod(myTable[i][colNumber]) < low)
+				low = stod(myTable[i][colNumber]);
+		}
+
+		return low;
+	};
 
 	//Destructor
 	~tableClass();
+
+private:
+	//check if the string given is a float
+	int ifFloat(string str);
 };
 
 
@@ -127,7 +186,7 @@ public:
 int main()
 {
 	int numRows, numCols;
-	string fileName;
+	string fileName, dataType;
 	char option;
 
 	cin >> numRows >> numCols >> fileName;
@@ -143,12 +202,15 @@ int main()
 	d->display();
 
 
-	cout << endl << "The Sorted Table" << endl;
+	cout << endl << "The Sorted Table:" << endl;
 	d->sortTable();
 	d->display();
 	
     
     // TODO: read the data types and store in DTarray of d
+	cin >> ws;
+	getline(cin, dataType);
+	d->readDT(dataType);
 
     // TODO: start reading the options till the end of the file
 

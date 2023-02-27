@@ -21,7 +21,6 @@ R or row look up. when given a set of rows will return a tableClass of the data 
 S or select area is to look at a select area of data 
 
 ## To Do 
-- Fix error with not showing the first letter or the double at the end 
 - Operation
 - search 
 - exceptions
