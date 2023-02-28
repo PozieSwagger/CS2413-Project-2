@@ -182,16 +182,28 @@ public:
 	}; 
 
  	// returns a tableClass with a set of columns from colLeft to colRight indices
-	// tableClass* getColumns(int colLeft, int colRight){
+	tableClass* getColumns(int colLeft, int colRight){
 
-	// 	//print the DTarry with is being used
-	// 	for(int i = colLeft; i < colRight; i++){
-	// 		cout << DTarray[colLeft] << " ";
-	// 	}
-	// 	cout << endl;
+		//print the DTarry with is being used
+		for(int i = colLeft; i < colRight; i++){
+			cout << DTarray[colLeft] << " ";
+		}
+		cout << endl;
 		
-	// 	return 
-	// };
+		//the distance between teh two columns
+		int newColumn = colRight - colLeft;
+
+		//construt the tableclass array
+		tableClass* tempArray = new tableClass(noRows, newColumn);
+		
+		for(int x = 0; x < noRows; x++){
+			for(int y = colLeft; y < colRight; y++){
+				tempArray->myTable[x][y] = myTable[x][y];
+			}
+		}
+
+		return tempArray;
+	};
 
 	// returns a tableClass with a set of rows from rowTop to rowBottom indices
 	tableClass* getRows(int rowTop, int rowBottom); 
@@ -246,6 +258,7 @@ int main()
 
     // TODO: start reading the options till the end of the file
 	while(cin >> option){
+		//show the given information from the name
 		if(option == 'F'){
 			cin >> optionStr;
 			try{
@@ -266,6 +279,7 @@ int main()
 				cout << "Record not found" << endl;
 			}
 		}
+		//search for the given value and where it is located
 		if(option == 'V'){
 			cin >> optionStr;
 			cout << "Searching for " << optionStr << endl;
@@ -282,9 +296,11 @@ int main()
 			}
 			
 		}
+		//print out the table
 		if(option == 'D'){
 			d->display();
 		}
+		//Operation for the find min in the given column
 		if(option == 'I'){
 			cin >> optionStr;
 			try{
