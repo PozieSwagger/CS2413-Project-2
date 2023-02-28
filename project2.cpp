@@ -84,6 +84,8 @@ public:
 			y = 0;
 		}
 
+		sortTable();
+
 		//close the file
 		file.close();
 	};
@@ -114,7 +116,7 @@ public:
 
 		//loop through the 2d array
 		for(int i = 0; i < noRows; i++){
-			for(int j = 0; j < noCols; j++){
+			for(int j = 0; j < noRows - 1; j++){
 				
 				//compare the value to sort
 				if(myTable[j][0] > myTable[j + 1][0]){
@@ -186,7 +188,7 @@ public:
 
 		//print the DTarry with is being used
 		for(int i = colLeft; i < colRight; i++){
-			cout << DTarray[colLeft] << " ";
+			cout << DTarray[i] << " ";
 		}
 		cout << endl;
 		
@@ -196,20 +198,91 @@ public:
 		//construt the tableclass array
 		tableClass* tempArray = new tableClass(noRows, newColumn);
 		
+		//input the values
 		for(int x = 0; x < noRows; x++){
 			for(int y = colLeft; y < colRight; y++){
-				tempArray->myTable[x][y] = myTable[x][y];
+				tempArray->myTable[x][y - colLeft] = myTable[x][y];
 			}
+		}
+
+		//print out the table
+		for(int x = 0; x < noRows; x++){
+			for(int y = 0; y < newColumn; y++){
+				cout << tempArray->myTable[x][y] << " ";
+			}
+			cout << endl;
 		}
 
 		return tempArray;
 	};
 
 	// returns a tableClass with a set of rows from rowTop to rowBottom indices
-	tableClass* getRows(int rowTop, int rowBottom); 
+	tableClass* getRows(int rowTop, int rowBottom){
+
+		//print out the DTarray
+		for(int i = 0; i < noCols; i++){
+			cout << DTarray[i] << " ";
+		}
+		cout << endl;
+
+		//distance between the two index
+		int newRow = rowBottom - rowTop;
+
+		//construct the tableClass array
+		tableClass* tempArray = new tableClass(newRow, noCols);
+
+		//input the values into the tempArray
+		for(int x = rowTop; x < rowBottom; x++){
+			for(int y = 0; y < noCols; y++){
+				tempArray->myTable[x - rowTop][y] = myTable[x][y];
+			}
+		}
+
+		//print out the tableClass
+		for(int x = 0; x < newRow; x++){
+			for(int y = 0; y < noCols; y++){
+				cout << tempArray->myTable[x][y] << " ";
+			}
+			cout << endl;
+		}
+
+		return tempArray;
+	}; 
 
 	// returns a tableClass with the data between the cols and rows given
-	tableClass* getRowsCols(int colLeft, int colRight, int rowTop, int rowBottom); 
+	tableClass* getRowsCols(int colLeft, int colRight, int rowTop, int rowBottom){
+
+		//print the DTarry with is being used
+		for(int i = colLeft; i < colRight; i++){
+			cout << DTarray[i] << " ";
+		}
+		cout << endl;
+
+		//distance between the two index
+		int newRow = rowBottom - rowTop;
+		//the distance between the two columns
+		int newColumn = colRight - colLeft;
+
+		//construct the tableClass array
+		tableClass* tempArray = new tableClass(newRow, newColumn);
+
+		//input the values into the tempArray
+		for(int x = rowTop; x < rowBottom; x++){
+			for(int y = colLeft; y < colRight; y++){
+				tempArray->myTable[x - rowTop][y- colLeft] = myTable[x][y];
+			}
+		}
+
+		//print out the tableClass
+		for(int x = 0; x < newRow; x++){
+			for(int y = 0; y < newColumn; y++){
+				cout << tempArray->myTable[x][y] << " ";
+			}
+			cout << endl;
+		}
+
+		return tempArray;
+	}; 
 
 	//Find info of a given column
 	// returns the min of the given column
@@ -249,7 +322,7 @@ int main()
     // TODO: read the file input name and call readCSV()
 	d->readCSV(fileName);
 	
-	d->sortTable();
+	//d->sortTable();
 	
     // TODO: read the data types and store in DTarray of d
 	cin >> ws;
@@ -315,13 +388,44 @@ int main()
 				cout << "Column Number " << optionStr << " out of bounds"<< endl;
 			}
 		}
+		//Search for the selected given columns
 		if(option == 'C'){
 
-		}
-		if(option == 'R'){
+			//input for where to search
+			cin >> optionStr;
+			int value1 = stoi(optionStr);
+			cin >> optionStr;
+			int value2 = stoi(optionStr);
+
+			d->getColumns(value1, value2);
 
 		}
+		//Search for the selected given rows
+		if(option == 'R'){
+
+			//input for where to search
+			cin >> optionStr;
+			int value1 = stoi(optionStr);
+			cin >> optionStr;
+			int value2 = stoi(optionStr);
+
+			d->getRows(value1, value2);
+
+		}
+		//Search from the given rows and column for a selected area of the data
 		if(option == 'S'){
+
+			//input for where to search
+			cin >> optionStr;
+			int value1 = stoi(optionStr);
+			cin >> optionStr;
+			int value2 = stoi(optionStr);
+			cin >> optionStr;
+			int value3 = stoi(optionStr);
+			cin >> optionStr;
+			int value4 = stoi(optionStr);
+
+			d->getRowsCols(value1, value2, value3, value4);
 
 		}
 	}
