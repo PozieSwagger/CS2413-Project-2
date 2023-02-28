@@ -146,24 +146,29 @@ public:
 
 	//Search value from table
 	void searchValue(string str){
-		
-		//check if float and search last column
-		if(ifFloat(str) == 1){
-			for(int i = 0; i < noRows; i++){
-				if(str == myTable[posDTarray()][i])
-					cout << " found in (" << posDTarray() << ", " << i << ")" << endl;
-			}
-		}
-		//search the int values
-		else{
-			for(int x = 3; x < 5; x++){
-				for(int y= 0; y < noRows; y++){
-					if(str == myTable[x][y])
-						cout << " found in (" << x << ", " << y << ")" << endl;
+
+		//search for the values
+		for(int x = 0; x < noRows; x++){
+			for(int y = 3; y < noCols +1; y++){
+				if(str.substr(0, str.length()) == myTable[x][y]){
+					cout << " found in (" << x << ", " << y << ")" << endl;
 				}
 			}
 		}
 
+	};
+
+	int isPresent(string str){
+		//search for the values
+		for(int x = 0; x < noRows; x++){
+			for(int y = 3; y < noCols; y++){
+				if(str.substr(0, str.length()) == myTable[x][y]){
+					return 1;
+				}
+			}
+		}
+
+		return -1;
 	};
 	
 	//Getters
@@ -177,15 +182,16 @@ public:
 	}; 
 
  	// returns a tableClass with a set of columns from colLeft to colRight indices
-	tableClass* getColumns(int colLeft, int colRight){
+	// tableClass* getColumns(int colLeft, int colRight){
 
-		//print the DTarry with is being used
-		for(int i = colLeft; i < colRight; i++){
-			cout << DTarray[colLeft] << " ";
-		}
-		cout << endl;
+	// 	//print the DTarry with is being used
+	// 	for(int i = colLeft; i < colRight; i++){
+	// 		cout << DTarray[colLeft] << " ";
+	// 	}
+	// 	cout << endl;
 		
-	};
+	// 	return 
+	// };
 
 	// returns a tableClass with a set of rows from rowTop to rowBottom indices
 	tableClass* getRows(int rowTop, int rowBottom); 
@@ -211,31 +217,6 @@ public:
 
 	//Destructor
 	~tableClass();
-
-private:
-	//check if the string given is a float
-	int ifFloat(string str){
-
-		//loop through string
-		for(int i = 0; i < str.length(); i++){
-			if(str[i] == '.')
-				return 1;
-		}
-
-		return 0;
-	};
-
-	//check the postion of float in the DTarray
-	int posDTarray(){
-		
-		//search for the float
-		for(int i = 0; i < noCols; i++){
-			if(DTarray[i] == "float")
-				return i;
-		}
-
-		return noCols - 1;
-	};
 };
 
 
@@ -266,21 +247,57 @@ int main()
     // TODO: start reading the options till the end of the file
 	while(cin >> option){
 		if(option == 'F'){
-			cout << "Record found:" << endl;
 			cin >> optionStr;
-			d->searchRecord(optionStr);
+			try{
+
+				if(d->searchRecord(optionStr) == nullptr){
+					throw 505;
+				}
+				else{
+					cout << "Record found:" << endl << "      ";
+				
+					for(int i = 0; i < numCols; i++){
+						cout << d->searchRecord(optionStr)[i] << " ";
+					}
+					cout << endl;
+				}
+			}
+			catch(...){
+				cout << "Record not found" << endl;
+			}
 		}
 		if(option == 'V'){
 			cin >> optionStr;
 			cout << "Searching for " << optionStr << endl;
-			d->searchValue(optionStr);
+			try{
+				if(d->isPresent(optionStr) == -1){
+					throw 505;
+				}
+				else{
+					d->searchValue(optionStr);
+				}
+			}
+			catch(...){
+				cout << "Value not found" << endl;
+			}
+			
 		}
 		if(option == 'D'){
 			d->display();
 		}
 		if(option == 'I'){
 			cin >> optionStr;
-			cout << "Min of " << optionStr << " is " << d->findMin(stoi(optionStr)) << endl;
+			try{
+				if(numCols < stoi(optionStr)){
+					throw 505;
+				}
+				else{
+					cout << "Min of " << optionStr << " is " << d->findMin(stoi(optionStr)) << endl;
+				}
+			}
+			catch(...){
+				cout << "Column Number " << optionStr << " out of bounds"<< endl;
+			}
 		}
 		if(option == 'C'){
 
