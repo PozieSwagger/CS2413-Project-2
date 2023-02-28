@@ -175,9 +175,23 @@ public:
 	int getNumberCols(){
 		return noCols;
 	}; 
-	tableClass* getColumns(int colLeft, int colRight); // returns a tableClass with a set of columns from colLeft to colRight indices
-	tableClass* getRows(int rowTop, int rowBottom); // returns a tableClass with a set of rows from rowTop to rowBottom indices
-	tableClass* getRowsCols(int colLeft, int colRight, int rowTop, int rowBottom); // returns a tableClass with the data between the cols and rows given
+
+ 	// returns a tableClass with a set of columns from colLeft to colRight indices
+	tableClass* getColumns(int colLeft, int colRight){
+
+		//print the DTarry with is being used
+		for(int i = colLeft; i < colRight; i++){
+			cout << DTarray[colLeft] << " ";
+		}
+		cout << endl;
+		
+	};
+
+	// returns a tableClass with a set of rows from rowTop to rowBottom indices
+	tableClass* getRows(int rowTop, int rowBottom); 
+
+	// returns a tableClass with the data between the cols and rows given
+	tableClass* getRowsCols(int colLeft, int colRight, int rowTop, int rowBottom); 
 
 	//Find info of a given column
 	// returns the min of the given column
