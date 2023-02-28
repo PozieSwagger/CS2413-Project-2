@@ -40,7 +40,7 @@ public:
 		DTarray = new string [noCols];
 
 		//split the sting and enter into the array
-		for(int i = 0; i < 6; i++){
+		for(int i = 0; i < noCols; i++){
 			end = datatypes.find(' ');
 			DTarray[i] = datatypes.substr(0, end);
 			datatypes.erase(0, end + 1); 
@@ -91,6 +91,12 @@ public:
 	//Output Method
 	void display(){
 		
+		//print out DTarray
+		for(int i = 0; i < noCols; i++){
+			cout << DTarray[i] << " ";
+		}
+		cout << endl;
+
 		// loop and print put the line
 		for(int x = 0; x < noRows; x++){
 			for(int y = 0; y < noCols; y++){
@@ -135,13 +141,29 @@ public:
 				return myTable[i];
 		}
 
-
 		return nullptr;
 	};
 
 	//Search value from table
 	void searchValue(string str){
 		
+		//check if float and search last column
+		if(ifFloat(str) == 1){
+			for(int i = 0; i < noRows; i++){
+				if(str == myTable[posDTarray()][i])
+					cout << " found in (" << posDTarray() << ", " << i << ")" << endl;
+			}
+		}
+		//search the int values
+		else{
+			for(int x = 3; x < 5; x++){
+				for(int y= 0; y < noRows; y++){
+					if(str == myTable[x][y])
+						cout << " found in (" << x << ", " << y << ")" << endl;
+				}
+			}
+		}
+
 	};
 	
 	//Getters
@@ -178,7 +200,28 @@ public:
 
 private:
 	//check if the string given is a float
-	int ifFloat(string str);
+	int ifFloat(string str){
+
+		//loop through string
+		for(int i = 0; i < str.length(); i++){
+			if(str[i] == '.')
+				return 1;
+		}
+
+		return 0;
+	};
+
+	//check the postion of float in the DTarray
+	int posDTarray(){
+		
+		//search for the float
+		for(int i = 0; i < noCols; i++){
+			if(DTarray[i] == "float")
+				return i;
+		}
+
+		return noCols - 1;
+	};
 };
 
 
@@ -186,7 +229,7 @@ private:
 int main()
 {
 	int numRows, numCols;
-	string fileName, dataType;
+	string fileName, dataType, optionStr;
 	char option;
 
 	cin >> numRows >> numCols >> fileName;
@@ -197,22 +240,44 @@ int main()
 	tableClass* d = new tableClass(numRows, numCols);
 
     // TODO: read the file input name and call readCSV()
-
 	d->readCSV(fileName);
-	d->display();
-
-
-	cout << endl << "The Sorted Table:" << endl;
-	d->sortTable();
-	d->display();
 	
-    
+	d->sortTable();
+	
     // TODO: read the data types and store in DTarray of d
 	cin >> ws;
 	getline(cin, dataType);
 	d->readDT(dataType);
 
     // TODO: start reading the options till the end of the file
+	while(cin >> option){
+		if(option == 'F'){
+			cout << "Record found:" << endl;
+			cin >> optionStr;
+			d->searchRecord(optionStr);
+		}
+		if(option == 'V'){
+			cin >> optionStr;
+			cout << "Searching for " << optionStr << endl;
+			d->searchValue(optionStr);
+		}
+		if(option == 'D'){
+			d->display();
+		}
+		if(option == 'I'){
+			cin >> optionStr;
+			cout << "Min of " << optionStr << " is " << d->findMin(stoi(optionStr)) << endl;
+		}
+		if(option == 'C'){
+
+		}
+		if(option == 'R'){
+
+		}
+		if(option == 'S'){
+
+		}
+	}
 
 	return 0;
 }

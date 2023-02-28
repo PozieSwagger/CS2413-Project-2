@@ -2,6 +2,7 @@
     "files.associations": {
         "*.class": "jvm-bytecode-verbose",
         "iostream": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "ostream": "cpp"
     }
 }
